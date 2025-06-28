@@ -19,7 +19,23 @@ This is a simple web application that displays detailed information such as even
 
 ## Preview of Application.
 
+1) HomePage
+![Screenshot](assets/Home.png)
 
+2) Sydney Event Page
+![Screenshot](assets/sydneyEvents.png)
+
+3) Event Detail - Sydney
+![Screenshot](assets/eventDetail1.png)
+
+4) Pune Event Page
+![Screenshot](assets/puneEvents.png)
+
+5) Events Details - Pune
+![Screenshot](assets/eventDetail2.png)
+
+6) Filter events by Category 
+![Screenshot](assets/eventFilter.png)
 
 
 ## Setup Instructions to run locally
