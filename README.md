@@ -1,6 +1,6 @@
-# WebScraping details of upcoming events in Sydney.
+# WebScraping details of upcoming events in Sydney & Pune.
 
-This is a simple web application that displays detailed information such as event title,event date,event description,URL and image by scraping from the Original Website -https://www.sydney.com/events .From orignal website I have scarped all upcoming events located inside section called "All events in Sydney". The data is collected and displayed with a clean, responsive interface.
+This is a simple web application that displays detailed information such as event title,event date,event description,URL and image by scraping from the Original Website -https://www.sydney.com/events for city Sydney and https://www.eventbrite.com/ for Pune city.From orignal website I have scarped all upcoming events located inside section called "All events in Sydney". The data is collected and displayed with a clean, responsive interface.
 
 ## Features
 
