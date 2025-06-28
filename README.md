@@ -77,7 +77,7 @@ USE events_db;
 | category   | varchar(100) | YES  |     | NULL              |                   |
 | view_count | int          | YES  |     | 0                 |                   |
 +------------+--------------+------+-----+-------------------+-------------------+
-
+```
 
 ## 3) Update your db.py and app.py accordingly
 
