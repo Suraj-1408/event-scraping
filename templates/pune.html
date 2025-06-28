@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upcoming Events in Pune</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen text-gray-800">
+
+<div class="max-w-5xl mx-auto px-4 py-10">
+    <h1 class="text-4xl font-bold text-center mb-8 text-blue-900">Upcoming Events in Pune</h1>
+
+    <div class="flex justify-end mb-4">
+        <a href="/" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Go Back
+        </a>
+    </div>
+
+   <form method="GET" class="mb-6 text-right">
+    <label for="category" class="mr-2 font-medium">Filter by Category:</label>
+    <select name="category" id="category" class="p-2 border rounded" onchange="this.form.submit()">
+        <option value="">All</option>
+        <option value="Tech" {% if selected_category == 'Tech' %}selected{% endif %}>Tech</option>
+        <!--
+        <option value="Music" {% if selected_category == 'Music' %}selected{% endif %}>Music</option>
+        <option value="Art" {% if selected_category == 'Art' %}selected{% endif %}>Art</option>
+        -->
+        <option value="Business" {% if selected_category == 'Business' %}selected{% endif %}>Business</option>
+        
+        <option value="Health" {% if selected_category == 'Health' %}selected{% endif %}>Health</option>
+        <!--
+        <option value="Education" {% if selected_category == 'Education' %}selected{% endif %}>Education</option>
+        <option value="Sports" {% if selected_category == 'Sports' %}selected{% endif %}>Sports</option>
+        -->
+        <option value="Other" {% if selected_category == 'Other' %}selected{% endif %}>Other</option>
+    </select>
+</form>
+
+
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for event in events %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition transform hover:-translate-y-1">
+             {% if event[5] %}
+            <img src="{{ event[6] }}" alt="Event Image" class="w-full h-48 object-cover">
+            {% endif %}
+
+            <div class="p-4">
+                <h2 class="text-xl font-semibold text-blue-700">{{ event[1] }}</h2> <!-- title -->
+                <p class="text-sm text-purple-600 font-semibold mt-1">Category: {{ event[8] }}</p>
+
+                <p class="text-sm text-gray-600 mt-1"> {{ event[2] }}</p> <!-- location -->
+                <p class="text-sm mt-1"> {{ event[3] }}</p> <!-- price -->
+                <p class="text-sm mt-1">{{ event[4] }}</p> <!-- date -->
+                <!--
+                <a href="javascript:void(0);" onclick="handleViewClick({{ event[0] }}, {{event[6]|tojson|safe }})"
+                    class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    View Details
+                </a>
+                -->
+
+                <a href="#" 
+                    class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 view-details-link"
+                    data-event-id="{{ event[0] }}"
+                    data-url="{{ event[5] }}">
+                    View Details
+                </a>
+                <!--
+                <a href="{{ event[5] }}" ,target="_blank" class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    View Details
+                </a>
+                -->
+                <p class="text-sm text-gray-500 mt-1">Views: {{ event[9] or 0 }}</p>  
+
+            </div>
+           
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.view-details-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var eventId = this.getAttribute('data-event-id');
+      var redirectUrl = this.getAttribute('data-url');
+      fetch(`/increment_view/${eventId}`, {
+        method: 'POST'
+      }).then(() => {
+        window.open(redirectUrl, '_blank');
+      }).catch(err => {
+        console.error('Failed to increment view:', err);
+        window.open(redirectUrl, '_blank');
+      });
+    });
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upcoming Events in Sydney</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen text-gray-800">
+
+<div class="max-w-5xl mx-auto px-4 py-10">
+    <h1 class="text-4xl font-bold text-center mb-8 text-blue-900">Upcoming Events in Sydney</h1>
+
+
+     <!--Button to go back to homepage-->
+    <div class="flex justify-end mb-4">
+        <a href="/" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+           Go Back
+        </a>
+    </div>
+
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for event in events %}
+        <div class="bg-white rounded-xl shadow-md overflow-hidden transition transform hover:-translate-y-1 hover:shadow-lg">
+             {% if event[7] %}
+            <img src="{{ event[7] }}" alt="Event Image" class="w-full h-48 object-cover">
+            {% endif %}
+
+            <div class="p-4 flex flex-col">
+                
+                <h2 class="text-xl font-semibold text-blue-700">{{ event[1] }}</h2>
+                {% if event[2] %}
+                <p class="text-sm text-gray-600 mt-1">{{ event[2] }}</p>
+                {% endif %}
+                {% if event[3] %}
+                <p class="text-sm mt-2">{{ event[3][:100] }}...</p>
+                {% endif %}
+                {% if event[4] and event[5] %}
+                <p class="text-sm mt-2 text-gray-500">From <strong>{{ event[4] }}</strong> to <strong>{{ event[5] }}</strong></p>
+                {% endif %}
+                <!--
+                <button 
+                    class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 get-ticket-btn"
+                    data-event-id="{{ event[0] }}"
+                    data-redirect-url="{{ event[6] or '' }}">
+                    View Details
+                </button>
+                -->
+               
+                <a href="#"
+                    class="mt-3 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 view-details-link"
+                    data-event-id="{{ event[0] }}"
+                    data-redirect-url="{{ event[6]}}">
+                    View Details
+                </a>
+                
+
+                <p class="text-sm text-gray-500 mt-1"> views {{ event[8] }}</p>
+
+            </div>
+           
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+    <div class="bg-white rounded-lg p-6 max-w-md w-full">
+        <h3 class="text-xl font-semibold mb-4">Enter your email :</h3>
+        <form id="ticketForm" method="POST" action="/get_ticket">
+            <input type="email" name="email" placeholder="enter your email" required class="w-full p-2 border border-gray-300 rounded mb-4">
+            <input type="hidden" name="event_id" id="modal_event_id">
+            <input type="hidden" name="redirect_url" id="modal_redirect_url">
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.view-details-link').forEach(function (link) {
+
+        link.addEventListener('click', function (e) {
+            
+            e.preventDefault();
+            const eventId = this.getAttribute('data-event-id');
+            const redirectUrl = this.getAttribute('data-redirect-url');
+
+            console.log("eventId:", eventId, "redirectUrl:", redirectUrl);
+
+             // Strip quotes if accidentally added
+            if (redirectUrl && redirectUrl.startsWith('"') && redirectUrl.endsWith('"')) {
+                redirectUrl = redirectUrl.slice(1, -1);
+            }
+
+            console.log("Redirecting to:", redirectUrl);
+
+            if (!redirectUrl || redirectUrl === "null") {
+                alert("No valid redirect URL found.");
+                return;
+            }
+
+
+            fetch(`/increment_view_sydney/${eventId}`, {
+                method: 'POST'
+            }).then(() => {
+                window.open(redirectUrl, '_blank');
+            }).catch(err => {
+                console.error('View count update failed:', err);
+                window.open(redirectUrl, '_blank'); // fallback
+            });
+        });
+    });
+});
+</script>
+
+
+</body>
+</html>
